@@ -1,0 +1,139 @@
+Smartphone Finder
+HEADER
+Logo (top-left) → “Smartphone Finder”
+
+Progress Bar (top-right) → Steps 1–6 with percentage or dots.
+
+Step 1: Choose Your Platform
+UI Layout:
+
+Large card buttons with icons:
+
+iOS (Apple logo)
+
+Android (Android robot logo)
+
+No preference (mix icon)
+
+Next button (disabled until selection is made)
+
+UX Notes:
+
+When “iOS” is chosen → Show note: “iPhones start from around $500.”
+
+When “Android” is chosen → No price limitation.
+
+Step 2: Choose Brand
+UI Layout:
+
+Grid of brand logo cards: Apple, Samsung, Xiaomi, Google, OnePlus, Oppo, Vivo, etc.
+
+Skip option (for no brand preference)
+
+UX Notes:
+
+If “iOS” was picked → Show only Apple.
+
+Click on card → highlight selection.
+
+Step 3: Set Budget Range
+UI Layout:
+
+Range slider (min–max price)
+
+If iOS: min starts at $500
+
+If Android: min starts at $100
+
+Show currency selector (optional).
+
+Extra:
+
+Small “Popular ranges” chips: $100–$300, $300–$500, $500–$1000, $1000+ (click to auto-fill slider)
+
+Step 4: Primary Use Case
+UI Layout:
+
+Icon-based cards:
+
+Gaming 🎮
+
+Photography 📷
+
+Battery life 🔋
+
+Everyday use 📱
+
+Work productivity 💼
+
+Social media / Content creation 🎥
+
+Step 5: Rank Your Priorities
+UI Layout:
+
+Drag-and-drop list:
+
+Camera quality
+
+Battery life
+
+Performance
+
+Display quality
+
+Price
+
+Durability
+
+User drags items in order → This becomes weight scoring in algorithm.
+
+Step 6: Advanced Filters (Optional)
+Toggle Button: “I’m a tech enthusiast” → On click, reveal filters:
+
+IP Rating (e.g., IP68, IP67)
+
+Display Type (AMOLED, LCD, OLED)
+
+Refresh Rate (60Hz, 120Hz, 144Hz)
+
+CPU/GPU model
+
+RAM size
+
+Battery capacity (mAh)
+
+Expandable storage (Yes/No)
+
+Headphone jack (Yes/No)
+
+5G support (Yes/No)
+
+Results Page
+UI Layout:
+
+Top bar: “We found 8 phones for you” + “Adjust filters” button
+
+Card per phone:
+
+Phone image
+
+Name + short spec highlight (matches user’s priorities)
+
+Why it matches: “Great camera (DXOMark 135), long battery life (2 days usage)”
+
+Price
+
+“View more details” button
+
+Extra UX Boost:
+
+Filter sidebar for quick adjustments
+
+“Compare” option to view up to 3 models side-by-side
+
+Micro UX Enhancements
+Live result count after each selection (“Currently 34 models match”)
+
+Smart defaults (e.g., if gaming selected, 120Hz screen auto-preferred)
+
+Save progress in local storage (so users can return later without losing choices)
