@@ -12,7 +12,7 @@ import StepAdvanced from "./wizard-steps/step-advanced";
 import ResultsPage from "./results-page";
 
 export default function SmartphoneFinder() {
-  const { state, currentStep, totalSteps, goToStep, goToNext, goToPrevious, showResults } = useWizard();
+  const { state, currentStep, totalSteps, goToStep, goToNext, goToPrevious, showResults, updateState } = useWizard();
   const [resultCount, setResultCount] = useState("Analyzing options...");
 
   const progress = showResults ? 100 : (currentStep / totalSteps) * 100;
@@ -29,17 +29,17 @@ export default function SmartphoneFinder() {
 
     switch (currentStep) {
       case 1:
-        return <StepPlatform state={state} onNext={goToNext} onUpdate={setResultCount} />;
+        return <StepPlatform state={state} onNext={goToNext} onUpdate={setResultCount} updateState={updateState} />;
       case 2:
-        return <StepBrand state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} />;
+        return <StepBrand state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} updateState={updateState} />;
       case 3:
-        return <StepBudget state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} />;
+        return <StepBudget state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} updateState={updateState} />;
       case 4:
-        return <StepUseCase state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} />;
+        return <StepUseCase state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} updateState={updateState} />;
       case 5:
-        return <StepPriorities state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} />;
+        return <StepPriorities state={state} onNext={goToNext} onPrevious={goToPrevious} onUpdate={setResultCount} updateState={updateState} />;
       case 6:
-        return <StepAdvanced state={state} onNext={() => goToStep('results')} onPrevious={goToPrevious} onUpdate={setResultCount} />;
+        return <StepAdvanced state={state} onNext={() => goToStep('results')} onPrevious={goToPrevious} onUpdate={setResultCount} updateState={updateState} />;
       default:
         return null;
     }

@@ -6,7 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronLeft, Search, SkipForward } from "lucide-react";
-import { useWizard } from "@/hooks/use-wizard";
 import type { UserPreferences } from "@shared/schema";
 
 interface StepAdvancedProps {
@@ -14,10 +13,10 @@ interface StepAdvancedProps {
   onNext: () => void;
   onPrevious: () => void;
   onUpdate: (count: string) => void;
+  updateState: (state: UserPreferences) => void;
 }
 
-export default function StepAdvanced({ state, onNext, onPrevious, onUpdate }: StepAdvancedProps) {
-  const { updateState } = useWizard();
+export default function StepAdvanced({ state, onNext, onPrevious, onUpdate, updateState }: StepAdvancedProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {

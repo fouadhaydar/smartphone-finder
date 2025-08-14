@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, Gamepad2, Camera, Battery, Smartphone, Briefcase, Video } from "lucide-react";
-import { useWizard } from "@/hooks/use-wizard";
 import type { UserPreferences } from "@shared/schema";
 
 interface StepUseCaseProps {
@@ -10,10 +9,10 @@ interface StepUseCaseProps {
   onNext: () => void;
   onPrevious: () => void;
   onUpdate: (count: string) => void;
+  updateState: (state: UserPreferences) => void;
 }
 
-export default function StepUseCase({ state, onNext, onPrevious, onUpdate }: StepUseCaseProps) {
-  const { updateState } = useWizard();
+export default function StepUseCase({ state, onNext, onPrevious, onUpdate, updateState }: StepUseCaseProps) {
 
   const useCases = [
     {

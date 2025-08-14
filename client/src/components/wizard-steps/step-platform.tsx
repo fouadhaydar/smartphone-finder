@@ -2,24 +2,22 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Apple, Smartphone, HelpCircle } from "lucide-react";
-import { useWizard } from "@/hooks/use-wizard";
 import type { UserPreferences } from "@shared/schema";
 
 interface StepPlatformProps {
   state: UserPreferences;
   onNext: () => void;
   onUpdate: (count: string) => void;
+  updateState: (state: UserPreferences) => void;
 }
 
-export default function StepPlatform({ state, onNext, onUpdate }: StepPlatformProps) {
-  const { updateState } = useWizard();
+export default function StepPlatform({ state, onNext, onUpdate, updateState }: StepPlatformProps) {
 
   useEffect(() => {
     onUpdate("Analyzing options...");
   }, [onUpdate]);
 
   const handlePlatformSelect = (platform: "ios" | "android" | "any") => {
-    console.log("Platform selected:", platform);
     const newState = { ...state, platform };
     
     // Update budget constraints for iOS
@@ -27,7 +25,6 @@ export default function StepPlatform({ state, onNext, onUpdate }: StepPlatformPr
       newState.budget = { ...state.budget, min: 500, max: Math.max(500, state.budget.max) };
     }
     
-    console.log("Updating state:", newState);
     updateState(newState);
     
     // Mock result count update
@@ -100,10 +97,7 @@ export default function StepPlatform({ state, onNext, onUpdate }: StepPlatformPr
 
       <div className="flex justify-center">
         <Button
-          onClick={() => {
-            console.log("Next button clicked, platform:", state.platform);
-            onNext();
-          }}
+          onClick={onNext}
           disabled={!state.platform}
           className="px-8 py-3"
           data-testid="button-continue-brands"

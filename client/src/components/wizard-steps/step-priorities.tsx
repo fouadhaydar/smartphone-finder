@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, GripVertical, Camera, Battery, Cpu, Monitor, DollarSign, Shield } from "lucide-react";
-import { useWizard } from "@/hooks/use-wizard";
 import type { UserPreferences } from "@shared/schema";
 
 interface StepPrioritiesProps {
@@ -10,10 +9,10 @@ interface StepPrioritiesProps {
   onNext: () => void;
   onPrevious: () => void;
   onUpdate: (count: string) => void;
+  updateState: (state: UserPreferences) => void;
 }
 
-export default function StepPriorities({ state, onNext, onPrevious, onUpdate }: StepPrioritiesProps) {
-  const { updateState } = useWizard();
+export default function StepPriorities({ state, onNext, onPrevious, onUpdate, updateState }: StepPrioritiesProps) {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   const priorityIcons = {

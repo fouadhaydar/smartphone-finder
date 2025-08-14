@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useWizard } from "@/hooks/use-wizard";
 import type { UserPreferences } from "@shared/schema";
 
 interface StepBudgetProps {
@@ -13,10 +12,10 @@ interface StepBudgetProps {
   onNext: () => void;
   onPrevious: () => void;
   onUpdate: (count: string) => void;
+  updateState: (state: UserPreferences) => void;
 }
 
-export default function StepBudget({ state, onNext, onPrevious, onUpdate }: StepBudgetProps) {
-  const { updateState } = useWizard();
+export default function StepBudget({ state, onNext, onPrevious, onUpdate, updateState }: StepBudgetProps) {
   const [currency, setCurrency] = useState("USD");
 
   const minRange = state.platform === "ios" ? 500 : 100;

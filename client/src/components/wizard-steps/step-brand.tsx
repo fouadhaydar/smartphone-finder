@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, SkipForward } from "lucide-react";
-import { useWizard } from "@/hooks/use-wizard";
 import type { UserPreferences } from "@shared/schema";
 
 interface StepBrandProps {
@@ -10,10 +9,10 @@ interface StepBrandProps {
   onNext: () => void;
   onPrevious: () => void;
   onUpdate: (count: string) => void;
+  updateState: (state: UserPreferences) => void;
 }
 
-export default function StepBrand({ state, onNext, onPrevious, onUpdate }: StepBrandProps) {
-  const { updateState } = useWizard();
+export default function StepBrand({ state, onNext, onPrevious, onUpdate, updateState }: StepBrandProps) {
 
   const brandData = {
     ios: [{ name: "Apple", icon: "fab fa-apple" }],
