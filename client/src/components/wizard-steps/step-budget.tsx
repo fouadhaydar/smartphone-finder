@@ -5,7 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { UserPreferences } from "@shared/schema";
+import type { UserPreferences, Smartphone } from "@shared/schema";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 interface StepBudgetProps {
   state: UserPreferences;
@@ -18,14 +20,30 @@ interface StepBudgetProps {
 export default function StepBudget({ state, onNext, onPrevious, onUpdate, updateState }: StepBudgetProps) {
   const [currency, setCurrency] = useState("USD");
 
-  const minRange = state.platform === "ios" ? 500 : 100;
+  const { data: allPhones } = useQuery({
+    queryKey: ["/api/smartphones"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/smartphones");
+      return res.json() as Promise<Smartphone[]>;
+    },
+  });
+
+  const platformDefaultMin = state.platform === "ios" ? 500 : 100;
+  const selectedBrandsLower = (state.brands || []).map((b) => b.toLowerCase());
+  const phonesForMin = (allPhones || []).filter((p) => {
+    if (state.platform && state.platform !== "any" && p.platform !== state.platform) return false;
+    if (selectedBrandsLower.length > 0 && !selectedBrandsLower.includes(p.brand.toLowerCase())) return false;
+    return true;
+  });
+  const datasetMin = selectedBrandsLower.length > 0 && phonesForMin.length > 0 ? Math.min(...phonesForMin.map((p) => p.price)) : undefined;
+  const minRange = datasetMin ?? platformDefaultMin;
   const maxRange = 2000;
 
   const popularRanges = [
-    { label: "$100 - $300", min: 100, max: 300, disabled: state.platform === "ios" },
-    { label: "$300 - $500", min: 300, max: 500, disabled: false },
-    { label: "$500 - $1000", min: 500, max: 1000, disabled: false },
-    { label: "$1000+", min: 1000, max: 2000, disabled: false },
+    { label: "$100 - $300", min: 100, max: 300, disabled: 300 < minRange },
+    { label: "$300 - $500", min: 300, max: 500, disabled: 500 < minRange },
+    { label: "$500 - $1000", min: 500, max: 1000, disabled: 1000 < minRange },
+    { label: "$1000+", min: 1000, max: 2000, disabled: 2000 < minRange },
   ];
 
   useEffect(() => {
@@ -33,19 +51,28 @@ export default function StepBudget({ state, onNext, onPrevious, onUpdate, update
     onUpdate(`Currently ${count} models match`);
   }, [state.budget, onUpdate]);
 
+  useEffect(() => {
+    if (state.budget.min < minRange) {
+      updateState({
+        ...state,
+        budget: { min: minRange, max: Math.max(state.budget.max, minRange) },
+      });
+    }
+  }, [minRange]);
+
   const handleBudgetChange = (values: number[]) => {
     const [min, max] = values;
-    updateState({ 
-      ...state, 
-      budget: { min: Math.max(min, minRange), max } 
+    updateState({
+      ...state,
+      budget: { min: Math.max(min, minRange), max }
     });
   };
 
   const handlePopularRangeClick = (min: number, max: number) => {
     const adjustedMin = Math.max(min, minRange);
-    updateState({ 
-      ...state, 
-      budget: { min: adjustedMin, max } 
+    updateState({
+      ...state,
+      budget: { min: adjustedMin, max }
     });
   };
 
@@ -65,8 +92,8 @@ export default function StepBudget({ state, onNext, onPrevious, onUpdate, update
               key={range.label}
               variant="outline"
               className={`${
-                range.disabled 
-                  ? "opacity-50 cursor-not-allowed" 
+                range.disabled
+                  ? "opacity-50 cursor-not-allowed"
                   : "hover:border-brand-blue transition-colors"
               }`}
               disabled={range.disabled}
