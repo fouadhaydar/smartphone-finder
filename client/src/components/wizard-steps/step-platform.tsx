@@ -19,6 +19,7 @@ export default function StepPlatform({ state, onNext, onUpdate }: StepPlatformPr
   }, [onUpdate]);
 
   const handlePlatformSelect = (platform: "ios" | "android" | "any") => {
+    console.log("Platform selected:", platform);
     const newState = { ...state, platform };
     
     // Update budget constraints for iOS
@@ -26,6 +27,7 @@ export default function StepPlatform({ state, onNext, onUpdate }: StepPlatformPr
       newState.budget = { ...state.budget, min: 500, max: Math.max(500, state.budget.max) };
     }
     
+    console.log("Updating state:", newState);
     updateState(newState);
     
     // Mock result count update
@@ -98,7 +100,10 @@ export default function StepPlatform({ state, onNext, onUpdate }: StepPlatformPr
 
       <div className="flex justify-center">
         <Button
-          onClick={onNext}
+          onClick={() => {
+            console.log("Next button clicked, platform:", state.platform);
+            onNext();
+          }}
           disabled={!state.platform}
           className="px-8 py-3"
           data-testid="button-continue-brands"
