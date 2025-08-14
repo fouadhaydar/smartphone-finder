@@ -1,0 +1,1315 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Finder - Find Your Perfect Device</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-blue': '#3B82F6',
+                        'brand-purple': '#8B5CF6',
+                        'brand-success': '#10B981',
+                        'brand-warning': '#F59E0B',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-gentle': 'bounceGentle 0.6s ease-in-out',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounceGentle {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+        
+        .drag-item {
+            transition: all 0.2s ease;
+        }
+        .drag-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .range-slider {
+            background: linear-gradient(to right, #3B82F6 0%, #3B82F6 50%, #E5E7EB 50%, #E5E7EB 100%);
+        }
+        
+        .brand-card {
+            transition: all 0.3s ease;
+        }
+        .brand-card:hover {
+            transform: scale(1.02);
+        }
+        .brand-card.selected {
+            ring: 2px solid #3B82F6;
+            background: #EFF6FF;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-blue to-brand-purple rounded-lg flex items-center justify-center">
+                        <i class="fas fa-mobile-alt text-white text-sm"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-900">Smartphone Finder</h1>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-600">Step <span id="current-step">1</span> of 6</span>
+                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="bg-brand-blue h-2 rounded-full transition-all duration-500" style="width: 16.67%"></div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-500" id="result-count">Analyzing options...</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Step 1: Platform Selection -->
+        <div id="step-1" class="step-container animate-fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Choose Your Platform</h2>
+                <p class="text-lg text-gray-600">Which operating system do you prefer?</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- iOS Option -->
+                <div class="platform-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-platform="ios">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="fab fa-apple text-2xl text-gray-700"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">iOS</h3>
+                        <p class="text-gray-600 text-sm">Apple's ecosystem with seamless integration</p>
+                        <div class="mt-4 p-2 bg-blue-50 rounded-lg">
+                            <p class="text-xs text-blue-700 font-medium">Starting from $500</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Android Option -->
+                <div class="platform-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-platform="android">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="fab fa-android text-2xl text-gray-700"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Android</h3>
+                        <p class="text-gray-600 text-sm">Open platform with extensive customization</p>
+                        <div class="mt-4 p-2 bg-green-50 rounded-lg">
+                            <p class="text-xs text-green-700 font-medium">Wide price range available</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- No Preference Option -->
+                <div class="platform-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-platform="any">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-question text-2xl text-gray-700"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No Preference</h3>
+                        <p class="text-gray-600 text-sm">Show me all available options</p>
+                        <div class="mt-4 p-2 bg-purple-50 rounded-lg">
+                            <p class="text-xs text-purple-700 font-medium">Best of both worlds</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center">
+                <button id="step-1-next" class="next-btn px-8 py-3 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed transition-all duration-300" disabled>
+                    Continue to Brands
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Brand Selection -->
+        <div id="step-2" class="step-container hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Choose Brand</h2>
+                <p class="text-lg text-gray-600">Which brands do you prefer? (Optional)</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8" id="brand-grid">
+                <!-- Brand cards will be populated based on platform selection -->
+            </div>
+            
+            <div class="text-center mb-6">
+                <button class="text-brand-blue hover:text-brand-purple font-medium" id="skip-brand">
+                    <i class="fas fa-skip-forward mr-2"></i>Skip - No brand preference
+                </button>
+            </div>
+            
+            <div class="flex justify-between">
+                <button class="prev-btn px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <button id="step-2-next" class="next-btn px-8 py-3 bg-brand-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                    Continue to Budget
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Budget Range -->
+        <div id="step-3" class="step-container hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Set Your Budget</h2>
+                <p class="text-lg text-gray-600">What's your price range?</p>
+            </div>
+            
+            <!-- Popular Ranges -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Popular Ranges</h3>
+                <div class="flex flex-wrap gap-3" id="popular-ranges">
+                    <button class="budget-chip px-4 py-2 bg-white border-2 border-gray-200 rounded-full text-sm font-medium hover:border-brand-blue transition-colors" data-min="100" data-max="300">
+                        $100 - $300
+                    </button>
+                    <button class="budget-chip px-4 py-2 bg-white border-2 border-gray-200 rounded-full text-sm font-medium hover:border-brand-blue transition-colors" data-min="300" data-max="500">
+                        $300 - $500
+                    </button>
+                    <button class="budget-chip px-4 py-2 bg-white border-2 border-gray-200 rounded-full text-sm font-medium hover:border-brand-blue transition-colors" data-min="500" data-max="1000">
+                        $500 - $1000
+                    </button>
+                    <button class="budget-chip px-4 py-2 bg-white border-2 border-gray-200 rounded-full text-sm font-medium hover:border-brand-blue transition-colors" data-min="1000" data-max="2000">
+                        $1000+
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Range Slider -->
+            <div class="bg-white rounded-xl p-6 mb-8">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <label class="text-lg font-semibold text-gray-900">Custom Range</label>
+                        <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <option>USD ($)</option>
+                            <option>EUR (€)</option>
+                            <option>GBP (£)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="relative">
+                        <input type="range" id="min-price" class="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="100" max="2000" value="300" step="50">
+                        <input type="range" id="max-price" class="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="100" max="2000" value="800" step="50">
+                    </div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-brand-blue" id="min-price-display">$300</div>
+                            <div class="text-sm text-gray-600">Minimum</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-brand-blue" id="max-price-display">$800</div>
+                            <div class="text-sm text-gray-600">Maximum</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-between">
+                <button class="prev-btn px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <button id="step-3-next" class="next-btn px-8 py-3 bg-brand-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                    Continue to Use Case
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Primary Use Case -->
+        <div id="step-4" class="step-container hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Primary Use Case</h2>
+                <p class="text-lg text-gray-600">How will you primarily use your phone?</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="use-case-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-usecase="gaming">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-gamepad text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Gaming</h3>
+                        <p class="text-gray-600 text-sm">High-performance processing and smooth graphics</p>
+                    </div>
+                </div>
+                
+                <div class="use-case-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-usecase="photography">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-camera text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Photography</h3>
+                        <p class="text-gray-600 text-sm">Superior camera quality and photo editing</p>
+                    </div>
+                </div>
+                
+                <div class="use-case-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-usecase="battery">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-battery-full text-2xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Battery Life</h3>
+                        <p class="text-gray-600 text-sm">All-day usage without frequent charging</p>
+                    </div>
+                </div>
+                
+                <div class="use-case-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-usecase="everyday">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-mobile-alt text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Everyday Use</h3>
+                        <p class="text-gray-600 text-sm">Balanced performance for daily tasks</p>
+                    </div>
+                </div>
+                
+                <div class="use-case-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-usecase="productivity">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-briefcase text-2xl text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Work Productivity</h3>
+                        <p class="text-gray-600 text-sm">Business apps and multitasking capability</p>
+                    </div>
+                </div>
+                
+                <div class="use-case-card bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-brand-blue cursor-pointer transition-all duration-300 hover:shadow-lg" data-usecase="content">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-video text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Content Creation</h3>
+                        <p class="text-gray-600 text-sm">Video recording and social media sharing</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-between">
+                <button class="prev-btn px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <button id="step-4-next" class="next-btn px-8 py-3 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed transition-all duration-300" disabled>
+                    Continue to Priorities
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Rank Priorities -->
+        <div id="step-5" class="step-container hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Rank Your Priorities</h2>
+                <p class="text-lg text-gray-600">Drag to reorder what matters most to you</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 mb-8">
+                <div class="mb-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Priority Order</h3>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-hand-paper mr-1"></i>Drag to reorder
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">Most important at the top, least important at the bottom</p>
+                </div>
+                
+                <div id="priority-list" class="space-y-3">
+                    <div class="drag-item bg-gray-50 rounded-lg p-4 border border-gray-200 cursor-move" draggable="true" data-priority="camera">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-grip-vertical text-gray-400"></i>
+                                <i class="fas fa-camera text-purple-600"></i>
+                                <span class="font-medium text-gray-900">Camera Quality</span>
+                            </div>
+                            <div class="text-sm text-gray-500">#1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="drag-item bg-gray-50 rounded-lg p-4 border border-gray-200 cursor-move" draggable="true" data-priority="battery">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-grip-vertical text-gray-400"></i>
+                                <i class="fas fa-battery-full text-green-600"></i>
+                                <span class="font-medium text-gray-900">Battery Life</span>
+                            </div>
+                            <div class="text-sm text-gray-500">#2</div>
+                        </div>
+                    </div>
+                    
+                    <div class="drag-item bg-gray-50 rounded-lg p-4 border border-gray-200 cursor-move" draggable="true" data-priority="performance">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-grip-vertical text-gray-400"></i>
+                                <i class="fas fa-microchip text-blue-600"></i>
+                                <span class="font-medium text-gray-900">Performance</span>
+                            </div>
+                            <div class="text-sm text-gray-500">#3</div>
+                        </div>
+                    </div>
+                    
+                    <div class="drag-item bg-gray-50 rounded-lg p-4 border border-gray-200 cursor-move" draggable="true" data-priority="display">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-grip-vertical text-gray-400"></i>
+                                <i class="fas fa-desktop text-indigo-600"></i>
+                                <span class="font-medium text-gray-900">Display Quality</span>
+                            </div>
+                            <div class="text-sm text-gray-500">#4</div>
+                        </div>
+                    </div>
+                    
+                    <div class="drag-item bg-gray-50 rounded-lg p-4 border border-gray-200 cursor-move" draggable="true" data-priority="price">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-grip-vertical text-gray-400"></i>
+                                <i class="fas fa-dollar-sign text-yellow-600"></i>
+                                <span class="font-medium text-gray-900">Price</span>
+                            </div>
+                            <div class="text-sm text-gray-500">#5</div>
+                        </div>
+                    </div>
+                    
+                    <div class="drag-item bg-gray-50 rounded-lg p-4 border border-gray-200 cursor-move" draggable="true" data-priority="durability">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-grip-vertical text-gray-400"></i>
+                                <i class="fas fa-shield-alt text-red-600"></i>
+                                <span class="font-medium text-gray-900">Durability</span>
+                            </div>
+                            <div class="text-sm text-gray-500">#6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-between">
+                <button class="prev-btn px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <button id="step-5-next" class="next-btn px-8 py-3 bg-brand-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                    Continue to Advanced
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 6: Advanced Filters -->
+        <div id="step-6" class="step-container hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Advanced Filters</h2>
+                <p class="text-lg text-gray-600">Fine-tune your preferences (Optional)</p>
+            </div>
+            
+            <!-- Tech Enthusiast Toggle -->
+            <div class="bg-white rounded-xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">I'm a tech enthusiast</h3>
+                        <p class="text-sm text-gray-600">Show detailed technical specifications</p>
+                    </div>
+                    <button id="tech-toggle" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors focus:outline-none">
+                        <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Advanced Filters (Initially Hidden) -->
+            <div id="advanced-filters" class="hidden space-y-6">
+                <!-- Display Specifications -->
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Display Specifications</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Display Type</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option>Any</option>
+                                <option>AMOLED</option>
+                                <option>OLED</option>
+                                <option>LCD</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Refresh Rate</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option>Any</option>
+                                <option>60Hz</option>
+                                <option>90Hz</option>
+                                <option>120Hz</option>
+                                <option>144Hz+</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Specifications -->
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Performance Specifications</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">RAM Size</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option>Any</option>
+                                <option>4GB</option>
+                                <option>6GB</option>
+                                <option>8GB</option>
+                                <option>12GB+</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Battery Capacity</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <option>Any</option>
+                                <option>3000-4000 mAh</option>
+                                <option>4000-5000 mAh</option>
+                                <option>5000+ mAh</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Features & Connectivity -->
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Features & Connectivity</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue">
+                                <span class="ml-2 text-sm text-gray-700">5G Support</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue">
+                                <span class="ml-2 text-sm text-gray-700">Headphone Jack</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue">
+                                <span class="ml-2 text-sm text-gray-700">Wireless Charging</span>
+                            </label>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue">
+                                <span class="ml-2 text-sm text-gray-700">Expandable Storage</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue">
+                                <span class="ml-2 text-sm text-gray-700">Water Resistance (IP67+)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue">
+                                <span class="ml-2 text-sm text-gray-700">Fingerprint Scanner</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mb-6">
+                <button class="text-brand-blue hover:text-brand-purple font-medium" id="skip-advanced">
+                    <i class="fas fa-skip-forward mr-2"></i>Skip advanced filters
+                </button>
+            </div>
+            
+            <div class="flex justify-between">
+                <button class="prev-btn px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <button id="step-6-next" class="next-btn px-8 py-3 bg-brand-success text-white rounded-lg font-medium hover:bg-green-600 transition-colors">
+                    Find My Phone
+                    <i class="fas fa-search ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div id="results" class="step-container hidden">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">Your Perfect Matches</h2>
+                        <p class="text-lg text-gray-600" id="results-count">We found 8 phones that match your preferences</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-filter mr-2"></i>Adjust Filters
+                        </button>
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-exchange-alt mr-2"></i>Compare (0)
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid lg:grid-cols-4 gap-6">
+                <!-- Filter Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl p-6 sticky top-24">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Filters</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sort by</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                    <option>Best Match</option>
+                                    <option>Price: Low to High</option>
+                                    <option>Price: High to Low</option>
+                                    <option>Newest First</option>
+                                    <option>Most Popular</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Availability</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-brand-blue" checked>
+                                        <span class="ml-2 text-sm text-gray-700">In Stock</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-brand-blue">
+                                        <span class="ml-2 text-sm text-gray-700">Pre-order</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Release Year</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-brand-blue" checked>
+                                        <span class="ml-2 text-sm text-gray-700">2024</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-brand-blue" checked>
+                                        <span class="ml-2 text-sm text-gray-700">2023</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="rounded border-gray-300 text-brand-blue">
+                                        <span class="ml-2 text-sm text-gray-700">2022</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Grid -->
+                <div class="lg:col-span-3">
+                    <div class="space-y-6" id="phone-results">
+                        <!-- Phone Result Card 1 -->
+                        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <!-- Phone Image -->
+                                <div class="flex-shrink-0">
+                                    <!-- High-end iPhone 15 Pro in Natural Titanium color -->
+                                    <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=300" alt="iPhone 15 Pro" class="w-32 h-32 object-cover rounded-lg">
+                                </div>
+                                
+                                <!-- Phone Details -->
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900">iPhone 15 Pro</h3>
+                                            <p class="text-gray-600">Apple • 128GB</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-gray-900">$999</div>
+                                            <div class="text-sm text-green-600 font-medium">✓ In Stock</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Match Reasons -->
+                                    <div class="mb-4">
+                                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Why it matches:</h4>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                                                Excellent Camera (DXOMark 146)
+                                            </span>
+                                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                                                Premium Build Quality
+                                            </span>
+                                            <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                                                iOS Ecosystem
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Key Specs -->
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 text-sm">
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-microchip mr-1"></i>A17 Pro
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-memory mr-1"></i>8GB RAM
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-battery-full mr-1"></i>3274 mAh
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-tv mr-1"></i>6.1" OLED
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="flex space-x-3">
+                                        <button class="flex-1 px-4 py-2 bg-brand-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                            View Details
+                                        </button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-plus mr-2"></i>Compare
+                                        </button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phone Result Card 2 -->
+                        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <!-- Phone Image -->
+                                <div class="flex-shrink-0">
+                                    <!-- Samsung Galaxy S24 Ultra smartphone in sleek black -->
+                                    <img src="https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=300" alt="Samsung Galaxy S24 Ultra" class="w-32 h-32 object-cover rounded-lg">
+                                </div>
+                                
+                                <!-- Phone Details -->
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900">Galaxy S24 Ultra</h3>
+                                            <p class="text-gray-600">Samsung • 256GB</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-gray-900">$1,199</div>
+                                            <div class="text-sm text-green-600 font-medium">✓ In Stock</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Match Reasons -->
+                                    <div class="mb-4">
+                                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Why it matches:</h4>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                                                Outstanding Camera System
+                                            </span>
+                                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                                                S Pen Productivity
+                                            </span>
+                                            <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                                                200MP Camera
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Key Specs -->
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 text-sm">
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-microchip mr-1"></i>Snapdragon 8 Gen 3
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-memory mr-1"></i>12GB RAM
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-battery-full mr-1"></i>5000 mAh
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-tv mr-1"></i>6.8" AMOLED
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="flex space-x-3">
+                                        <button class="flex-1 px-4 py-2 bg-brand-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                            View Details
+                                        </button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-plus mr-2"></i>Compare
+                                        </button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phone Result Card 3 -->
+                        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <!-- Phone Image -->
+                                <div class="flex-shrink-0">
+                                    <!-- Google Pixel 8 Pro smartphone in modern design -->
+                                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=300" alt="Google Pixel 8 Pro" class="w-32 h-32 object-cover rounded-lg">
+                                </div>
+                                
+                                <!-- Phone Details -->
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900">Pixel 8 Pro</h3>
+                                            <p class="text-gray-600">Google • 128GB</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-gray-900">$999</div>
+                                            <div class="text-sm text-green-600 font-medium">✓ In Stock</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Match Reasons -->
+                                    <div class="mb-4">
+                                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Why it matches:</h4>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                                                AI-Enhanced Photography
+                                            </span>
+                                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                                                Pure Android Experience
+                                            </span>
+                                            <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                                                7 Years of Updates
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Key Specs -->
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 text-sm">
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-microchip mr-1"></i>Tensor G3
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-memory mr-1"></i>12GB RAM
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-battery-full mr-1"></i>5050 mAh
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <i class="fas fa-tv mr-1"></i>6.7" OLED
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="flex space-x-3">
+                                        <button class="flex-1 px-4 py-2 bg-brand-blue text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                            View Details
+                                        </button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-plus mr-2"></i>Compare
+                                        </button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Load More -->
+                        <div class="text-center py-8">
+                            <button class="px-6 py-3 bg-white border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Load More Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Restart Button -->
+            <div class="text-center mt-12">
+                <button id="restart-finder" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-redo mr-2"></i>Start Over
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            // Application State
+            const state = {
+                currentStep: 1,
+                platform: null,
+                brands: [],
+                budget: { min: 300, max: 800 },
+                useCase: null,
+                priorities: ['camera', 'battery', 'performance', 'display', 'price', 'durability'],
+                advancedFilters: {}
+            };
+
+            // DOM Elements
+            const elements = {
+                currentStepDisplay: document.getElementById('current-step'),
+                progressBar: document.getElementById('progress-bar'),
+                resultCount: document.getElementById('result-count'),
+                stepContainers: document.querySelectorAll('.step-container'),
+                prevBtns: document.querySelectorAll('.prev-btn'),
+                nextBtns: document.querySelectorAll('.next-btn')
+            };
+
+            // Brand data
+            const brandData = {
+                ios: [
+                    { name: 'Apple', icon: 'fab fa-apple' }
+                ],
+                android: [
+                    { name: 'Samsung', icon: 'fas fa-mobile-alt' },
+                    { name: 'Google', icon: 'fab fa-google' },
+                    { name: 'OnePlus', icon: 'fas fa-mobile-alt' },
+                    { name: 'Xiaomi', icon: 'fas fa-mobile-alt' },
+                    { name: 'Oppo', icon: 'fas fa-mobile-alt' },
+                    { name: 'Vivo', icon: 'fas fa-mobile-alt' }
+                ],
+                any: [
+                    { name: 'Apple', icon: 'fab fa-apple' },
+                    { name: 'Samsung', icon: 'fas fa-mobile-alt' },
+                    { name: 'Google', icon: 'fab fa-google' },
+                    { name: 'OnePlus', icon: 'fas fa-mobile-alt' },
+                    { name: 'Xiaomi', icon: 'fas fa-mobile-alt' },
+                    { name: 'Oppo', icon: 'fas fa-mobile-alt' },
+                    { name: 'Vivo', icon: 'fas fa-mobile-alt' },
+                    { name: 'Huawei', icon: 'fas fa-mobile-alt' }
+                ]
+            };
+
+            // Initialize app
+            function init() {
+                setupEventListeners();
+                updateProgress();
+                loadSavedState();
+                updateResultCount();
+            }
+
+            // Event Listeners
+            function setupEventListeners() {
+                // Platform Selection
+                document.querySelectorAll('.platform-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        selectPlatform(this.dataset.platform);
+                    });
+                });
+
+                // Next/Previous buttons
+                document.getElementById('step-1-next').addEventListener('click', () => navigateToStep(2));
+                document.getElementById('step-2-next').addEventListener('click', () => navigateToStep(3));
+                document.getElementById('step-3-next').addEventListener('click', () => navigateToStep(4));
+                document.getElementById('step-4-next').addEventListener('click', () => navigateToStep(5));
+                document.getElementById('step-5-next').addEventListener('click', () => navigateToStep(6));
+                document.getElementById('step-6-next').addEventListener('click', () => navigateToStep('results'));
+
+                elements.prevBtns.forEach(btn => {
+                    btn.addEventListener('click', () => navigateToStep(state.currentStep - 1));
+                });
+
+                // Skip buttons
+                document.getElementById('skip-brand').addEventListener('click', () => navigateToStep(3));
+                document.getElementById('skip-advanced').addEventListener('click', () => navigateToStep('results'));
+
+                // Use case selection
+                document.querySelectorAll('.use-case-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        selectUseCase(this.dataset.usecase);
+                    });
+                });
+
+                // Budget chips
+                document.querySelectorAll('.budget-chip').forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        const min = parseInt(this.dataset.min);
+                        const max = parseInt(this.dataset.max);
+                        setBudgetRange(min, max);
+                    });
+                });
+
+                // Budget sliders
+                const minSlider = document.getElementById('min-price');
+                const maxSlider = document.getElementById('max-price');
+                
+                if (minSlider && maxSlider) {
+                    minSlider.addEventListener('input', updateBudgetDisplay);
+                    maxSlider.addEventListener('input', updateBudgetDisplay);
+                }
+
+                // Tech enthusiast toggle
+                const techToggle = document.getElementById('tech-toggle');
+                if (techToggle) {
+                    techToggle.addEventListener('click', toggleAdvancedFilters);
+                }
+
+                // Restart button
+                const restartBtn = document.getElementById('restart-finder');
+                if (restartBtn) {
+                    restartBtn.addEventListener('click', restartFinder);
+                }
+
+                // Setup drag and drop for priorities
+                setupDragAndDrop();
+            }
+
+            // Platform Selection
+            function selectPlatform(platform) {
+                state.platform = platform;
+                
+                // Update UI
+                document.querySelectorAll('.platform-card').forEach(card => {
+                    card.classList.remove('border-brand-blue', 'bg-blue-50');
+                });
+                
+                document.querySelector(`[data-platform="${platform}"]`).classList.add('border-brand-blue', 'bg-blue-50');
+                
+                // Enable next button
+                const nextBtn = document.getElementById('step-1-next');
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                nextBtn.classList.add('bg-brand-blue', 'text-white', 'hover:bg-blue-600');
+                
+                // Update budget minimums for step 3
+                updateBudgetConstraints();
+                
+                // Save state
+                saveState();
+                updateResultCount();
+            }
+
+            // Brand Selection
+            function populateBrands() {
+                const brandGrid = document.getElementById('brand-grid');
+                const brands = brandData[state.platform] || brandData.any;
+                
+                brandGrid.innerHTML = brands.map(brand => `
+                    <div class="brand-card bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-brand-blue cursor-pointer text-center transition-all duration-300" data-brand="${brand.name.toLowerCase()}">
+                        <div class="w-12 h-12 mx-auto mb-2 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="${brand.icon} text-xl text-gray-700"></i>
+                        </div>
+                        <div class="text-sm font-medium text-gray-900">${brand.name}</div>
+                    </div>
+                `).join('');
+                
+                // Add click listeners
+                document.querySelectorAll('.brand-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        toggleBrand(this.dataset.brand);
+                    });
+                });
+            }
+
+            function toggleBrand(brand) {
+                const index = state.brands.indexOf(brand);
+                if (index > -1) {
+                    state.brands.splice(index, 1);
+                } else {
+                    state.brands.push(brand);
+                }
+                
+                // Update UI
+                document.querySelectorAll('.brand-card').forEach(card => {
+                    if (state.brands.includes(card.dataset.brand)) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                });
+                
+                saveState();
+                updateResultCount();
+            }
+
+            // Budget Management
+            function updateBudgetConstraints() {
+                const minSlider = document.getElementById('min-price');
+                const maxSlider = document.getElementById('max-price');
+                
+                if (state.platform === 'ios') {
+                    if (minSlider) {
+                        minSlider.min = 500;
+                        minSlider.value = Math.max(500, state.budget.min);
+                    }
+                    if (maxSlider) {
+                        maxSlider.min = 500;
+                        maxSlider.value = Math.max(500, state.budget.max);
+                    }
+                    state.budget.min = Math.max(500, state.budget.min);
+                    state.budget.max = Math.max(500, state.budget.max);
+                } else {
+                    if (minSlider) {
+                        minSlider.min = 100;
+                    }
+                    if (maxSlider) {
+                        maxSlider.min = 100;
+                    }
+                }
+                
+                updateBudgetDisplay();
+            }
+
+            function setBudgetRange(min, max) {
+                state.budget.min = min;
+                state.budget.max = max;
+                
+                const minSlider = document.getElementById('min-price');
+                const maxSlider = document.getElementById('max-price');
+                
+                if (minSlider) minSlider.value = min;
+                if (maxSlider) maxSlider.value = max;
+                
+                updateBudgetDisplay();
+                saveState();
+                updateResultCount();
+            }
+
+            function updateBudgetDisplay() {
+                const minSlider = document.getElementById('min-price');
+                const maxSlider = document.getElementById('max-price');
+                const minDisplay = document.getElementById('min-price-display');
+                const maxDisplay = document.getElementById('max-price-display');
+                
+                if (minSlider && maxSlider && minDisplay && maxDisplay) {
+                    const min = parseInt(minSlider.value);
+                    const max = parseInt(maxSlider.value);
+                    
+                    // Ensure min doesn't exceed max
+                    if (min > max) {
+                        if (event.target === minSlider) {
+                            maxSlider.value = min;
+                        } else {
+                            minSlider.value = max;
+                        }
+                    }
+                    
+                    state.budget.min = parseInt(minSlider.value);
+                    state.budget.max = parseInt(maxSlider.value);
+                    
+                    minDisplay.textContent = `$${state.budget.min}`;
+                    maxDisplay.textContent = `$${state.budget.max}`;
+                    
+                    saveState();
+                    updateResultCount();
+                }
+            }
+
+            // Use Case Selection
+            function selectUseCase(useCase) {
+                state.useCase = useCase;
+                
+                // Update UI
+                document.querySelectorAll('.use-case-card').forEach(card => {
+                    card.classList.remove('border-brand-blue', 'bg-blue-50');
+                });
+                
+                document.querySelector(`[data-usecase="${useCase}"]`).classList.add('border-brand-blue', 'bg-blue-50');
+                
+                // Enable next button
+                const nextBtn = document.getElementById('step-4-next');
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                nextBtn.classList.add('bg-brand-blue', 'text-white', 'hover:bg-blue-600');
+                
+                // Apply smart defaults based on use case
+                applySmartDefaults(useCase);
+                
+                saveState();
+                updateResultCount();
+            }
+
+            function applySmartDefaults(useCase) {
+                // TODO: Implement smart defaults based on use case
+                // For example, if gaming is selected, prioritize performance and refresh rate
+            }
+
+            // Drag and Drop for Priorities
+            function setupDragAndDrop() {
+                const priorityList = document.getElementById('priority-list');
+                if (!priorityList) return;
+
+                let draggedElement = null;
+
+                priorityList.addEventListener('dragstart', function(e) {
+                    draggedElement = e.target;
+                    e.target.style.opacity = '0.5';
+                });
+
+                priorityList.addEventListener('dragend', function(e) {
+                    e.target.style.opacity = '';
+                });
+
+                priorityList.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                });
+
+                priorityList.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (e.target.classList.contains('drag-item') && e.target !== draggedElement) {
+                        const rect = e.target.getBoundingClientRect();
+                        const midpoint = rect.top + rect.height / 2;
+                        
+                        if (e.clientY < midpoint) {
+                            priorityList.insertBefore(draggedElement, e.target);
+                        } else {
+                            priorityList.insertBefore(draggedElement, e.target.nextSibling);
+                        }
+                        
+                        updatePriorityOrder();
+                    }
+                });
+            }
+
+            function updatePriorityOrder() {
+                const items = document.querySelectorAll('#priority-list .drag-item');
+                state.priorities = Array.from(items).map(item => item.dataset.priority);
+                
+                // Update position numbers
+                items.forEach((item, index) => {
+                    const numberSpan = item.querySelector('.text-sm.text-gray-500');
+                    if (numberSpan) {
+                        numberSpan.textContent = `#${index + 1}`;
+                    }
+                });
+                
+                saveState();
+            }
+
+            // Advanced Filters
+            function toggleAdvancedFilters() {
+                const toggle = document.getElementById('tech-toggle');
+                const filters = document.getElementById('advanced-filters');
+                
+                toggle.classList.toggle('bg-brand-blue');
+                const toggleSpan = toggle.querySelector('span');
+                toggleSpan.classList.toggle('translate-x-5');
+                
+                if (filters.classList.contains('hidden')) {
+                    filters.classList.remove('hidden');
+                } else {
+                    filters.classList.add('hidden');
+                }
+            }
+
+            // Navigation
+            function navigateToStep(step) {
+                if (step === 'results') {
+                    showResults();
+                    return;
+                }
+                
+                // Hide current step
+                elements.stepContainers.forEach(container => {
+                    container.classList.add('hidden');
+                });
+                
+                // Show target step
+                const targetStep = document.getElementById(`step-${step}`);
+                if (targetStep) {
+                    targetStep.classList.remove('hidden');
+                    state.currentStep = step;
+                    
+                    // Special handling for step 2 (brands)
+                    if (step === 2) {
+                        populateBrands();
+                    }
+                    
+                    // Special handling for step 3 (budget)
+                    if (step === 3) {
+                        updateBudgetConstraints();
+                    }
+                    
+                    updateProgress();
+                    saveState();
+                }
+            }
+
+            // Results
+            function showResults() {
+                elements.stepContainers.forEach(container => {
+                    container.classList.add('hidden');
+                });
+                
+                document.getElementById('results').classList.remove('hidden');
+                state.currentStep = 'results';
+                updateProgress();
+                
+                // TODO: Implement actual phone matching algorithm
+                updateResultCount();
+            }
+
+            // Progress Management
+            function updateProgress() {
+                const stepNumber = typeof state.currentStep === 'number' ? state.currentStep : 6;
+                const percentage = (stepNumber / 6) * 100;
+                
+                elements.currentStepDisplay.textContent = stepNumber;
+                elements.progressBar.style.width = `${percentage}%`;
+            }
+
+            // Result Count
+            function updateResultCount() {
+                // TODO: Implement actual phone matching logic
+                const mockCount = Math.floor(Math.random() * 50) + 10;
+                elements.resultCount.textContent = `Currently ${mockCount} models match`;
+            }
+
+            // State Management
+            function saveState() {
+                localStorage.setItem('smartphoneFinderState', JSON.stringify(state));
+            }
+
+            function loadSavedState() {
+                const saved = localStorage.getItem('smartphoneFinderState');
+                if (saved) {
+                    const savedState = JSON.parse(saved);
+                    Object.assign(state, savedState);
+                    
+                    // Restore UI state
+                    if (state.platform) {
+                        selectPlatform(state.platform);
+                    }
+                    // TODO: Restore other UI states
+                }
+            }
+
+            function restartFinder() {
+                localStorage.removeItem('smartphoneFinderState');
+                location.reload();
+            }
+
+            // Initialize the application
+            init();
+        })();
+    </script>
+</body>
+</html>
